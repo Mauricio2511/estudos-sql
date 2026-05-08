@@ -65,4 +65,31 @@ Exibir apenas países com mais de 20 cidades cadastradas.
 
 ---
 
+## Objetivo 3
+
+Listar:
+
+* continente
+* quantidade de países distintos
+* soma da população das cidades
+
+Considerando apenas cidades:
+
+* com nome iniciado pela letra `S`
+* e população maior que 200000.
+
+Exibir apenas continentes com soma da população das cidades maior que 50000000.
+
+---
+
+## Query
+
+[Visualizar Query](inner-join/exercicio-03/query.sql)
+
+## Resultado
+
+![Resultado Exercício 3](inner-join/exercicio-03/resultado3.png)
+
+---
+
 
