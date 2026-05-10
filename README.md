@@ -163,4 +163,161 @@ ORDER BY POPULACAO_TOTAL DESC;
 
 ---
 
+# SUBQUERY
+
+## Objetivo 1
+
+Listar:
+
+* nome do país
+* população do país
+
+Exibir apenas países com população maior que a média da população de todos os países.
+
+Retornar apenas os 10 primeiros países nessas condições.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="subqueries/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](subqueries/exercicio-01/query.sql)
+
+```sql id="z9qm2x"
+SELECT
+    NAME AS PAÍS,
+    POPULATION AS POPULACAO
+FROM COUNTRY
+WHERE POPULATION > (
+    SELECT
+        AVG(POPULATION)
+    FROM COUNTRY
+)
+ORDER BY POPULACAO DESC
+LIMIT 10;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 2
+
+Listar:
+
+* nome da cidade
+* população da cidade
+* nome do país
+
+Exibir apenas cidades com população maior que a média da população de todas as cidades.
+
+Retornar apenas cidades pertencentes a países do continente `Asia`.
+
+Limitar o resultado aos 10 registros com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="subqueries/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](subqueries/exercicio-02/query.sql)
+
+```sql id="n4pk8x"
+SELECT
+    CI.NAME AS CIDADE,
+    CI.POPULATION AS POPULACAO,
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE
+FROM CITY CI
+INNER JOIN COUNTRY C
+    ON CI.COUNTRYCODE = C.CODE
+WHERE CI.POPULATION > (
+    SELECT
+        AVG(POPULATION)
+    FROM CITY
+)
+AND C.CONTINENT = 'ASIA'
+ORDER BY POPULACAO DESC
+LIMIT 10;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 3
+
+Listar:
+
+* nome do país
+* continente
+* população do país
+
+Exibir apenas países que:
+
+* possuem cidades com população maior que 8000000
+* e possuem a letra `A` em qualquer posição do nome.
+
+Retornar apenas os 10 países com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="subqueries/exercicio-03/resultado3.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](subqueries/exercicio-03/query.sql)
+
+```sql id="k8vn4p"
+SELECT
+    NAME AS PAIS,
+    CONTINENT AS CONTINENTE,
+    POPULATION AS POPULACAO
+FROM COUNTRY
+WHERE CODE IN (
+    SELECT
+        COUNTRYCODE
+    FROM CITY
+    WHERE POPULATION > 8000000
+)
+AND NAME LIKE '%A%'
+ORDER BY POPULACAO DESC
+LIMIT 10;
+```
+
+</td>
+</tr>
+</table>
+
+---
 
