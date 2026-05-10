@@ -31,13 +31,35 @@ considerando apenas países com mais de 50 cidades.
 
 ---
 
-## Query
+<table>
+<tr>
+<td valign="top">
 
-[Visualizar Query](inner-join/exercicio-01/query.sql)
+### Resultado
 
-## Resultado
+<img src="inner-join/exercicio-01/resultado1.png">
 
-![Resultado Exercício 1](inner-join/exercicio-01/resultado1.png)
+</td>
+
+<td valign="top">
+
+### [Query](inner-join/exercicio-01/query.sql)
+
+```sql id="h2mf8x"
+SELECT
+    C.NAME AS PAÍS,
+    COUNT(*) AS QUANTIDADE_CIDADES_CADASTRADAS
+FROM CITY CI
+INNER JOIN COUNTRY C
+    ON CI.COUNTRYCODE = C.CODE
+GROUP BY C.NAME
+HAVING COUNT(*) > 50
+ORDER BY QUANTIDADE_CIDADES_CADASTRADAS DESC;
+```
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -55,13 +77,37 @@ Exibir apenas países com mais de 20 cidades cadastradas.
 
 ---
 
-## Query
+<table>
+<tr>
+<td valign="top">
 
-[Visualizar Query](inner-join/exercicio-02/query.sql)
+### Resultado
 
-## Resultado
+<img src="inner-join/exercicio-02/resultado2.png">
 
-![Resultado Exercício 2](inner-join/exercicio-02/resultado2.png)
+</td>
+
+<td valign="top">
+
+### [Query](inner-join/exercicio-02/query.sql)
+
+```sql id="m7xq2n"
+SELECT
+    C.NAME AS PAÍS,
+    COUNT(*) AS QTD_CIDADES,
+    AVG(CI.POPULATION) AS MEDIA_POPULACAO
+FROM CITY CI
+INNER JOIN COUNTRY C
+    ON CI.COUNTRYCODE = C.CODE
+WHERE CI.POPULATION > 300000
+GROUP BY C.NAME
+HAVING COUNT(*) > 20
+ORDER BY MEDIA_POPULACAO DESC;
+```
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -82,13 +128,38 @@ Exibir apenas continentes com soma da população das cidades maior que 50000000
 
 ---
 
-## Query
+<table>
+<tr>
+<td valign="top">
 
-[Visualizar Query](inner-join/exercicio-03/query.sql)
+### Resultado
 
-## Resultado
+<img src="inner-join/exercicio-03/resultado3.png">
 
-![Resultado Exercício 3](inner-join/exercicio-03/resultado3.png)
+</td>
+
+<td valign="top">
+
+### [Query](inner-join/exercicio-03/query.sql)
+
+```sql id="q8v3mn"
+SELECT
+    C.CONTINENT AS CONTINENTE,
+    COUNT(DISTINCT(C.NAME)) AS QTD_PAISES,
+    SUM(CI.POPULATION) AS POPULACAO_TOTAL
+FROM COUNTRY C
+INNER JOIN CITY CI
+    ON C.CODE = CI.COUNTRYCODE
+WHERE CI.NAME LIKE 'S%'
+    AND CI.POPULATION > 200000
+GROUP BY C.CONTINENT
+HAVING SUM(CI.POPULATION) > 50000000
+ORDER BY POPULACAO_TOTAL DESC;
+```
+
+</td>
+</tr>
+</table>
 
 ---
 
