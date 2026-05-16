@@ -406,7 +406,7 @@ Retornar apenas os 10 registros com maior população.
 
 ### Resultado
 
-<img src="procedures/exercicio-02/resultado2.png" width="500">
+<img src="procedures/exercicio-02/resultado2.png">
 
 </td>
 
@@ -469,7 +469,7 @@ Retornar apenas as 15 cidades com maior população.
 
 ### Resultado
 
-<img src="procedures/exercicio-03/resultado3.png" width="500">
+<img src="procedures/exercicio-03/resultado3.png">
 
 </td>
 
