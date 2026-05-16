@@ -355,7 +355,7 @@ Obs: Como boa prática, antes e após a criação da procedure, realizo a altera
 
 ### [Query](procedures/exercicio-01/query.sql)
 
-```sql id="x7pk3m"
+```sql id="f8mk2q"
 DELIMITER #
 
 CREATE PROCEDURE LISTAR_PAISES_POR_CONTINENTE(IN P_CONTINENTE VARCHAR(30))
@@ -381,4 +381,3 @@ CALL LISTAR_PAISES_POR_CONTINENTE('SOUTH AMERICA');
 </table>
 
 ---
-
