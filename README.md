@@ -321,3 +321,64 @@ LIMIT 10;
 
 ---
 
+# PROCEDURE
+
+## Objetivo 1
+
+Criar uma procedure chamada `LISTAR_PAISES_POR_CONTINENTE`.
+
+A procedure deve receber um parâmetro contendo o nome do continente.
+
+Listar:
+
+* nome do país
+* continente
+* população
+
+Ordenar da maior população para a menor.
+
+Obs: Como boa prática, antes e após a criação da procedure, realizo a alteração do `DELIMITER`.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="procedures/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](procedures/exercicio-01/query.sql)
+
+```sql id="x7pk3m"
+DELIMITER #
+
+CREATE PROCEDURE LISTAR_PAISES_POR_CONTINENTE(IN P_CONTINENTE VARCHAR(30))
+BEGIN
+
+    SELECT
+        NAME AS PAIS,
+        CONTINENT AS CONTINENTE,
+        POPULATION AS POPULACAO
+    FROM COUNTRY
+    WHERE CONTINENT = P_CONTINENTE
+    ORDER BY POPULACAO DESC;
+
+END #
+
+DELIMITER ;
+
+CALL LISTAR_PAISES_POR_CONTINENTE('SOUTH AMERICA');
+```
+
+</td>
+</tr>
+</table>
+
+---
+
