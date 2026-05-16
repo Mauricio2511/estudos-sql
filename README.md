@@ -381,3 +381,129 @@ CALL LISTAR_PAISES_POR_CONTINENTE('SOUTH AMERICA');
 </table>
 
 ---
+
+## Objetivo 2
+
+Criar uma procedure chamada `LISTAR_CIDADES_POR_POPULACAO`.
+
+A procedure deve receber um parâmetro contendo um valor de população mínima.
+
+Listar:
+
+* nome da cidade
+* população da cidade
+* nome do país
+
+Exibir apenas cidades com população maior que o valor informado no parâmetro.
+
+Retornar apenas os 10 registros com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="procedures/exercicio-02/resultado2.png" width="500">
+
+</td>
+
+<td valign="top">
+
+### [Query](procedures/exercicio-02/query.sql)
+
+```sql id="r4xn9m"
+DELIMITER #
+
+CREATE PROCEDURE LISTAR_CIDADES_POR_POPULACAO(IN P_POPULACAO INT)
+BEGIN
+
+    SELECT
+        CI.NAME AS CIDADE,
+        CI.POPULATION AS POPULACAO,
+        C.NAME AS PAIS
+    FROM CITY CI
+    INNER JOIN COUNTRY C
+        ON CI.COUNTRYCODE = C.CODE
+    WHERE CI.POPULATION > P_POPULACAO
+    ORDER BY POPULACAO DESC
+    LIMIT 10;
+
+END #
+
+DELIMITER ;
+
+CALL LISTAR_CIDADES_POR_POPULACAO(50000);
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 3
+
+Criar uma procedure chamada `LISTAR_CIDADES_POR_PAIS`.
+
+A procedure deve receber um parâmetro contendo o nome de um país.
+
+Listar:
+
+* nome da cidade
+* população da cidade
+* nome do país
+* continente
+
+Exibir apenas cidades pertencentes ao país informado no parâmetro.
+
+Retornar apenas as 15 cidades com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="procedures/exercicio-03/resultado3.png" width="500">
+
+</td>
+
+<td valign="top">
+
+### [Query](procedures/exercicio-03/query.sql)
+
+```sql id="p6mk8v"
+DELIMITER #
+
+CREATE PROCEDURE LISTAR_CIDADES_POR_PAIS(IN P_PAIS VARCHAR(60))
+BEGIN
+
+    SELECT
+        CI.NAME AS CIDADE,
+        CI.POPULATION AS POPULACAO,
+        C.NAME AS PAIS,
+        C.CONTINENT AS CONTINENTE
+    FROM CITY CI
+    INNER JOIN COUNTRY C
+        ON CI.COUNTRYCODE = C.CODE
+    WHERE C.NAME = P_PAIS
+    ORDER BY POPULACAO DESC
+    LIMIT 15;
+
+END #
+
+DELIMITER ;
+
+CALL LISTAR_CIDADES_POR_PAIS('BRAZIL');
+```
+
+</td>
+</tr>
+</table>
+
+---
