@@ -15,6 +15,7 @@ Repositório dedicado aos meus estudos práticos em SQL avançado utilizando MyS
 * Views
 * Procedures
 * Triggers
+* Case When
 
 ## Base de dados utilizada
 
@@ -506,4 +507,195 @@ CALL LISTAR_CIDADES_POR_PAIS('BRAZIL');
 </tr>
 </table>
 
+---
+
+# CASE WHEN
+
+## Objetivo 1
+
+Listar:
+
+* nome do país
+* continente
+* população
+* classificação da população
+
+Classificar a população dos países utilizando `CASE WHEN`, considerando:
+
+* população maior que 100000000 → `POPULAÇÃO MUITO ALTA`
+* população entre 50000000 e 100000000 → `POPULAÇÃO ALTA`
+* população entre 10000000 e 50000000 → `POPULAÇÃO MÉDIA`
+* população menor que 10000000 → `POPULAÇÃO BAIXA`
+
+Considerar apenas países:
+
+* do continente `Asia`
+* com população maior que 1000000
+
+Retornar apenas 15 registros.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="case-when/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](case-when/exercicio-01/query.sql)
+
+```sql
+SELECT
+    NAME AS PAIS,
+    CONTINENT AS CONTINENTE,
+    POPULATION AS 'POPULAÇÃO',
+    CASE
+        WHEN POPULATION > 100000000 THEN 'POPULAÇÃO MUITO ALTA'
+        WHEN POPULATION BETWEEN 50000000 AND 100000000 THEN 'POPULAÇÃO ALTA'
+        WHEN POPULATION BETWEEN 10000000 AND 50000000 THEN 'POPULAÇÃO MÉDIA'
+        ELSE 'POPULAÇÃO BAIXA'
+    END AS CLASSIFICACAO_POPULACAO
+FROM COUNTRY
+WHERE CONTINENT = 'ASIA'
+    AND POPULATION > 1000000
+LIMIT 15;
+```
+
+</td>
+</tr>
+</table>
+
+## Objetivo 2
+
+Listar:
+
+* nome da cidade
+* nome do país
+* continente
+* população da cidade
+* classificação do porte da cidade
+
+Classificar o porte das cidades utilizando `CASE WHEN`, considerando:
+
+* população maior que 5000000 → `MEGACIDADE`
+* população entre 1000000 e 5000000 → `CIDADE GRANDE`
+* população entre 500000 e 999999 → `CIDADE MÉDIA`
+* população menor que 500000 → `CIDADE PEQUENA`
+
+Considerar apenas cidades:
+
+* pertencentes ao continente `Europe`
+* com população maior que 100000
+
+Ordenar da maior população para a menor.
+
+Retornar apenas 20 registros.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="case-when/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](case-when/exercicio-02/query.sql)
+
+```sql
+SELECT
+    CI.NAME AS CIDADE,
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE,
+    CI.POPULATION AS POPULACAO,
+    CASE
+        WHEN CI.POPULATION > 5000000 THEN 'MEGACIDADE'
+        WHEN CI.POPULATION >= 1000000 AND CI.POPULATION <= 5000000 THEN 'CIDADE GRANDE'
+        WHEN CI.POPULATION >= 500000 AND CI.POPULATION < 1000000 THEN 'CIDADE MÉDIA'
+        ELSE 'CIDADE PEQUENA'
+    END AS CLASSIFICACAO_CIDADE
+FROM CITY CI
+INNER JOIN COUNTRY C
+    ON CI.COUNTRYCODE = C.CODE
+WHERE C.CONTINENT = 'EUROPE'
+    AND CI.POPULATION > 100000
+ORDER BY POPULACAO DESC
+LIMIT 20;
+```
+
+</td>
+</tr>
+</table>
+
+## Objetivo 3
+
+Listar:
+
+* continente
+* quantidade de países distintos
+* população total das cidades
+* classificação do impacto urbano
+
+Classificar o impacto urbano utilizando `CASE WHEN`, considerando:
+
+* soma da população das cidades maior que 1000000000 → `IMPACTO URBANO MUITO ALTO`
+* soma da população das cidades entre 500000000 e 1000000000 → `IMPACTO URBANO ALTO`
+* soma da população das cidades entre 100000000 e 500000000 → `IMPACTO URBANO MÉDIO`
+* soma da população das cidades menor que 100000000 → `IMPACTO URBANO BAIXO`
+
+Considerar apenas cidades com população maior que 300000.
+
+Agrupar os resultados por continente.
+
+Ordenar da maior população total das cidades para a menor.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="case-when/exercicio-03/resultado3.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](case-when/exercicio-03/query.sql)
+
+```sql
+SELECT
+    C.CONTINENT AS CONTINENTE,
+    COUNT(DISTINCT C.CODE) AS QTD_PAISES,
+    SUM(CI.POPULATION) AS POPULACAO_TOTAL,
+    CASE
+        WHEN SUM(CI.POPULATION) > 1000000000 THEN 'IMPACTO URBANO MUITO ALTO'
+        WHEN SUM(CI.POPULATION) >= 500000000 AND SUM(CI.POPULATION) <= 1000000000 THEN 'IMPACTO URBANO ALTO'
+        WHEN SUM(CI.POPULATION) >= 100000000 AND SUM(CI.POPULATION) < 500000000 THEN 'IMPACTO URBANO MÉDIO'
+        ELSE 'IMPACTO URBANO BAIXO'
+    END AS CLASSIFICACAO_IMPACTO_URBANO
+FROM COUNTRY C
+INNER JOIN CITY CI
+    ON C.CODE = CI.COUNTRYCODE
+WHERE CI.POPULATION > 300000
+GROUP BY C.CONTINENT
+ORDER BY POPULACAO_TOTAL DESC;
+```
+
+</td>
+</tr>
+</table>
 ---
