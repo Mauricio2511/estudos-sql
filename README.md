@@ -726,3 +726,55 @@ ORDER BY POPULACAO_TOTAL DESC;
 </table>
 
 ---
+
+# EXISTS
+
+## Objetivo 1
+
+Listar:
+
+* nome do país
+* continente
+* população do país
+
+Exibir apenas países que possuem pelo menos uma cidade cadastrada com população maior que 8000000.
+
+Retornar apenas os 10 países com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="exists/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](exists/exercicio-01/query.sql)
+
+```sql
+SELECT
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE,
+    C.POPULATION AS POPULACAO
+FROM COUNTRY C
+WHERE EXISTS (
+    SELECT 1
+    FROM CITY CI
+    WHERE C.CODE = CI.COUNTRYCODE
+        AND CI.POPULATION > 8000000
+)
+ORDER BY POPULACAO DESC
+LIMIT 10;
+```
+
+</td>
+</tr>
+</table>
+
+---
