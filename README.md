@@ -778,3 +778,59 @@ LIMIT 10;
 </table>
 
 ---
+
+## Objetivo 2
+
+Listar:
+
+* nome do país
+* continente
+* quantidade total de cidades cadastradas
+
+Exibir apenas países que possuem pelo menos uma cidade com população maior que 5000000.
+
+Mostrar apenas países que tenham mais de 20 cidades cadastradas no total.
+
+Retornar apenas os 15 países com maior quantidade de cidades.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="exists/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](exists/exercicio-02/query.sql)
+
+```sql
+SELECT
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE,
+    COUNT(CI.ID) AS QTDE_CIDADES
+FROM COUNTRY C
+JOIN CITY CI
+    ON C.CODE = CI.COUNTRYCODE
+WHERE EXISTS (
+    SELECT 1
+    FROM CITY CI2
+    WHERE CI2.COUNTRYCODE = C.CODE
+        AND CI2.POPULATION > 5000000
+)
+GROUP BY C.CODE, C.NAME, C.CONTINENT
+HAVING COUNT(CI.ID) > 20
+ORDER BY QTDE_CIDADES DESC
+LIMIT 15;
+```
+
+</td>
+</tr>
+</table>
+
+---
