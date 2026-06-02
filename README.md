@@ -887,3 +887,127 @@ ORDER BY POPULACAO_TOTAL DESC;
 </table>
 
 ---
+
+# CTE
+
+## Objetivo 1
+
+Criar uma CTE chamada `CIDADES_GRANDES`.
+
+A CTE deve listar cidades com população maior que 1000000.
+
+Na query principal, listar:
+
+* nome do país
+* continente
+* quantidade de cidades grandes
+* população total dessas cidades grandes
+
+Exibir apenas países com mais de 3 cidades grandes.
+
+Retornar apenas os 15 países com maior população total dessas cidades.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="cte/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](cte/exercicio-01/query.sql)
+
+```sql
+WITH CIDADES_GRANDES AS (
+    SELECT
+        COUNTRYCODE,
+        NAME,
+        POPULATION
+    FROM CITY
+    WHERE POPULATION > 1000000
+)
+SELECT
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE,
+    COUNT(*) AS QTD_CIDADES_GRANDES,
+    SUM(CG.POPULATION) AS POPULACAO_TOTAL
+FROM CIDADES_GRANDES CG
+INNER JOIN COUNTRY C
+    ON CG.COUNTRYCODE = C.CODE
+GROUP BY C.CODE, C.NAME, C.CONTINENT
+HAVING COUNT(*) > 3
+ORDER BY POPULACAO_TOTAL DESC
+LIMIT 15;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 2
+
+Criar uma CTE chamada `MEDIA_POPULACAO_CONTINENTE`.
+
+A CTE deve calcular a média da população dos países por continente.
+
+Na query principal, listar:
+
+* nome do país
+* continente
+* população do país
+* média de população do continente
+
+Exibir apenas países cuja população seja maior que a média de população do seu próprio continente.
+
+Retornar apenas os 20 países com maior população.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="cte/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](cte/exercicio-02/query.sql)
+
+```sql
+WITH MEDIA_POPULACAO_CONTINENTE AS (
+    SELECT
+        AVG(POPULATION) AS MEDIA_POPULACAO,
+        CONTINENT AS CONTINENTE
+    FROM COUNTRY
+    GROUP BY CONTINENT
+)
+SELECT
+    C.NAME AS PAIS,
+    C.CONTINENT AS CONTINENTE,
+    C.POPULATION AS POPULACAO,
+    MPC.MEDIA_POPULACAO AS MEDIA_POPULACAO
+FROM COUNTRY C
+INNER JOIN MEDIA_POPULACAO_CONTINENTE MPC
+    ON C.CONTINENT = MPC.CONTINENTE
+WHERE C.POPULATION > MPC.MEDIA_POPULACAO
+ORDER BY C.POPULATION DESC
+LIMIT 20;
+```
+
+</td>
+</tr>
+</table>
+
+---
