@@ -834,3 +834,56 @@ LIMIT 15;
 </table>
 
 ---
+
+## Objetivo 3
+
+Listar:
+
+* nome do continente
+* quantidade de países
+* população total dos países
+
+Exibir apenas continentes que possuem pelo menos um país com expectativa de vida maior que 80.
+
+Mostrar apenas continentes com mais de 10 países cadastrados.
+
+Ordenar os continentes pela maior população total.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="exists/exercicio-03/resultado3.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](exists/exercicio-03/query.sql)
+
+```sql
+SELECT
+    C1.CONTINENT AS CONTINENTE,
+    COUNT(C1.CODE) AS QTD_PAISES,
+    SUM(C1.POPULATION) AS POPULACAO_TOTAL
+FROM COUNTRY C1
+WHERE EXISTS (
+    SELECT 1
+    FROM COUNTRY C2
+    WHERE C2.LIFEEXPECTANCY > 80
+        AND C2.CONTINENT = C1.CONTINENT
+)
+GROUP BY C1.CONTINENT
+HAVING COUNT(C1.CODE) > 10
+ORDER BY POPULACAO_TOTAL DESC;
+```
+
+</td>
+</tr>
+</table>
+
+---
