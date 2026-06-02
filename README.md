@@ -1011,3 +1011,64 @@ LIMIT 20;
 </table>
 
 ---
+
+## Objetivo 3
+
+Criar uma CTE chamada `PAISES_COM_MUITAS_CIDADES`.
+
+A CTE deve listar países que possuem mais de 10 cidades cadastradas.
+
+Na query principal, listar:
+
+* nome do continente
+* quantidade de países com mais de 10 cidades
+* soma da população desses países
+* média da população desses países
+
+Exibir apenas continentes com mais de 2 países nessa condição.
+
+Ordenar pela maior soma de população para a menor.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="cte/exercicio-03/resultado3.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](cte/exercicio-03/query.sql)
+
+```sql
+WITH PAISES_COM_MUITAS_CIDADES AS (
+    SELECT
+        COUNTRYCODE,
+        COUNT(*) AS QTD_CIDADES
+    FROM CITY
+    GROUP BY COUNTRYCODE
+    HAVING COUNT(*) > 10
+)
+SELECT
+    C.CONTINENT AS CONTINENTE,
+    COUNT(*) AS QTD_PAISES,
+    SUM(C.POPULATION) AS POPULACAO_TOTAL,
+    AVG(C.POPULATION) AS MEDIA_POPULACAO
+FROM PAISES_COM_MUITAS_CIDADES PCMC
+INNER JOIN COUNTRY C
+    ON PCMC.COUNTRYCODE = C.CODE
+GROUP BY C.CONTINENT
+HAVING COUNT(*) > 2
+ORDER BY POPULACAO_TOTAL DESC;
+```
+
+</td>
+</tr>
+</table>
+
+---
