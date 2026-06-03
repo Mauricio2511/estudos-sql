@@ -7,7 +7,7 @@ Repositório dedicado aos meus estudos práticos em SQL avançado utilizando MyS
 * INNER JOIN
 * LEFT JOIN
 * RIGHT JOIN
-* FULL JOIN
+* UNION
 * Subqueries
 * EXISTS
 * CTE (Common Table Expressions)
@@ -1065,6 +1065,216 @@ INNER JOIN COUNTRY C
 GROUP BY C.CONTINENT
 HAVING COUNT(*) > 2
 ORDER BY POPULACAO_TOTAL DESC;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+# UNION
+
+## Objetivo 1
+
+Listar:
+
+* nome
+* tipo do registro
+* população
+
+Unir em uma única consulta:
+
+* países com população maior que 100000000
+* cidades com população maior que 8000000
+
+Criar uma coluna chamada `TIPO_REGISTRO`, indicando:
+
+* `PAIS` para registros vindos da tabela `COUNTRY`
+* `CIDADE` para registros vindos da tabela `CITY`
+
+Ordenar os registros da maior população para a menor.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="union/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](union/exercicio-01/query.sql)
+
+```sql
+SELECT
+    NAME AS PAIS,
+    'PAIS' AS TIPO_REGISTRO,
+    POPULATION AS POPULACAO
+FROM COUNTRY
+WHERE POPULATION > 100000000
+
+UNION
+
+SELECT
+    NAME AS CIDADE,
+    'CIDADE' AS TIPO_REGISTRO,
+    POPULATION AS POPULACAO
+FROM CITY
+WHERE POPULATION > 8000000
+ORDER BY POPULACAO DESC;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 2
+
+Listar:
+
+* nome do país
+* nome da cidade
+* população
+* tipo do registro
+
+Unir em uma única consulta:
+
+* cidades com população maior que 7000000
+* capitais de países com população maior que 50000000
+
+Criar uma coluna chamada `TIPO_REGISTRO`, indicando:
+
+* `CIDADE GRANDE`
+* `CAPITAL DE PAIS POPULOSO`
+
+Ordenar os registros da maior população para a menor.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="union/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](union/exercicio-02/query.sql)
+
+```sql
+SELECT
+    C.NAME AS PAIS,
+    CI.NAME AS CIDADE,
+    CI.POPULATION AS POPULACAO,
+    'CIDADE GRANDE' AS TIPO_REGISTRO
+FROM CITY CI
+JOIN COUNTRY C
+    ON CI.COUNTRYCODE = C.CODE
+WHERE CI.POPULATION > 7000000
+
+UNION
+
+SELECT
+    C.NAME AS PAIS,
+    CI.NAME AS CIDADE,
+    CI.POPULATION AS POPULACAO,
+    'CAPITAL DE PAIS POPULOSO' AS TIPO_REGISTRO
+FROM COUNTRY C
+JOIN CITY CI
+    ON C.CAPITAL = CI.ID
+WHERE C.POPULATION > 50000000
+ORDER BY POPULACAO DESC;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 3
+
+Listar:
+
+* nome do país
+* continente
+* população
+* categoria do registro
+
+Unir em uma única consulta:
+
+* países da `Asia` com população maior que 50000000
+* países da `Europe` com população maior que 30000000
+* países da `South America` com população maior que 20000000
+
+Criar uma coluna chamada `CATEGORIA_REGISTRO`, indicando:
+
+* `PAIS ASIATICO POPULOSO`
+* `PAIS EUROPEU POPULOSO`
+* `PAIS SUL-AMERICANO POPULOSO`
+
+Ordenar os registros da maior população para a menor.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="union/exercicio-03/resultado3.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](union/exercicio-03/query.sql)
+
+```sql
+SELECT
+    NAME AS PAIS,
+    CONTINENT AS CONTINENTE,
+    POPULATION AS POPULACAO,
+    'PAIS ASIATICO POPULOSO' AS CATEGORIA_REGISTRO
+FROM COUNTRY
+WHERE CONTINENT = 'ASIA'
+    AND POPULATION > 50000000
+
+UNION
+
+SELECT
+    NAME AS PAIS,
+    CONTINENT AS CONTINENTE,
+    POPULATION AS POPULACAO,
+    'PAIS EUROPEU POPULOSO' AS CATEGORIA_REGISTRO
+FROM COUNTRY
+WHERE CONTINENT = 'EUROPE'
+    AND POPULATION > 30000000
+
+UNION
+
+SELECT
+    NAME AS PAIS,
+    CONTINENT AS CONTINENTE,
+    POPULATION AS POPULACAO,
+    'PAIS SUL-AMERICANO POPULOSO' AS CATEGORIA_REGISTRO
+FROM COUNTRY
+WHERE CONTINENT = 'SOUTH AMERICA'
+    AND POPULATION > 20000000
+ORDER BY POPULACAO DESC;
 ```
 
 </td>
