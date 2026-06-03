@@ -1282,3 +1282,122 @@ ORDER BY POPULACAO DESC;
 </table>
 
 ---
+
+# LEFT JOIN
+
+Para praticar `LEFT JOIN` e `RIGHT JOIN` de forma mais visual, criei um database simples com duas tabelas principais: `clientes` e `pedidos`.
+
+Essa base foi criada propositalmente sem `FOREIGN KEY`, permitindo registros sem correspondência entre as tabelas. Dessa forma, é possível visualizar melhor situações como:
+
+* clientes que ainda não possuem pedidos
+* pedidos que não possuem cliente correspondente
+
+---
+
+## Objetivo 1
+
+Listar:
+
+* id do cliente
+* nome do cliente
+* cidade do cliente
+* id do pedido
+* produto
+* valor do pedido
+
+Exibir todos os clientes, mesmo aqueles que ainda não possuem pedidos.
+
+Clientes sem pedidos devem aparecer com os dados do pedido como `NULL`.
+
+A ordenação foi feita pelo id do pedido para facilitar a visualização dos registros sem pedido no resultado.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="left-join/exercicio-01/resultado1.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](left-join/exercicio-01/query.sql)
+
+```sql
+SELECT
+    C.ID_CLIENTE,
+    C.NOME AS CLIENTE,
+    C.CIDADE,
+    P.ID_PEDIDO,
+    P.PRODUTO,
+    P.VALOR AS 'VALOR DO PEDIDO'
+FROM CLIENTES C
+LEFT JOIN PEDIDOS P
+    ON C.ID_CLIENTE = P.ID_CLIENTE
+ORDER BY P.ID_PEDIDO;
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## Objetivo 2
+
+Listar:
+
+* id do cliente
+* nome do cliente
+* quantidade de pedidos realizados
+* valor total gasto
+
+Exibir todos os clientes, inclusive aqueles que não fizeram nenhum pedido.
+
+Clientes sem pedidos devem aparecer com:
+
+* quantidade de pedidos igual a `0`
+* total gasto igual a `0`
+
+Para substituir valores `NULL` no total gasto, foi utilizada a função `COALESCE()`.
+
+A ordenação foi feita pelo nome do cliente para facilitar a visualização do resultado.
+
+---
+
+<table>
+<tr>
+<td valign="top">
+
+### Resultado
+
+<img src="left-join/exercicio-02/resultado2.png">
+
+</td>
+
+<td valign="top">
+
+### [Query](left-join/exercicio-02/query.sql)
+
+```sql
+SELECT
+    C.ID_CLIENTE,
+    C.NOME,
+    COUNT(P.ID_PEDIDO) AS QTD_PEDIDOS,
+    COALESCE(SUM(P.VALOR), 0) AS TOTAL_GASTO
+FROM CLIENTES C
+LEFT JOIN PEDIDOS P
+    ON C.ID_CLIENTE = P.ID_CLIENTE
+GROUP BY C.ID_CLIENTE, C.NOME
+ORDER BY C.NOME;
+```
+
+</td>
+</tr>
+</table>
+
+---
